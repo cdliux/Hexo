@@ -1,6 +1,281 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Web安全问题与防护</title>
+    <url>/2019/10/24/Web%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98%E4%B8%8E%E9%98%B2%E6%8A%A4/</url>
+    <content><![CDATA[<h2 id="1-SQL-注入"><a href="#1-SQL-注入" class="headerlink" title="1. SQL 注入"></a>1. SQL 注入</h2><h3 id="1-1-介绍"><a href="#1-1-介绍" class="headerlink" title="1.1 介绍"></a>1.1 介绍</h3><p>例如做一个系统的登录界面，输入用户名和密码，提交之后，后端直接拿到数据就拼接 SQL 语句去查询数据库。如果在输入时进行了恶意的 SQL 拼装，那么最后生成的 SQL 就会有问题。</p>
+<p>比如后端拼接的 SQL 字符串是：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">user</span> <span class="keyword">WHERE</span> username = <span class="string">'user'</span> <span class="keyword">AND</span> <span class="keyword">password</span> = <span class="string">'pwd'</span>;</span><br></pre></td></tr></table></figure>
+
+<p>如果不做任何防护，直接拼接前端的字符，就会出现问题。比如前端传来的<code>user</code>字段是以<code>&#39;#</code>结尾，<code>password</code>随意：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">user</span> <span class="keyword">WHERE</span> username = <span class="string">'user'</span><span class="comment">#'AND password = 'pwd';</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>密码验证部分直接被注释掉了</strong>。</p>
+<a id="more"></a>
+
+<h3 id="1-2-防范"><a href="#1-2-防范" class="headerlink" title="1.2 防范"></a>1.2 防范</h3><p>后端应该对于字符串有转义，可以借助成熟的库的 API 来拼接命令，而不是自己手动拼接。</p>
+<h2 id="2-XSS：跨站脚本攻击"><a href="#2-XSS：跨站脚本攻击" class="headerlink" title="2. XSS：跨站脚本攻击"></a>2. XSS：跨站脚本攻击</h2><h3 id="2-1-介绍"><a href="#2-1-介绍" class="headerlink" title="2.1 介绍"></a>2.1 介绍</h3><p>原理上就是黑客通过某种方式（发布文章、发布评论等）将一段特定的 JS 代码隐蔽地输入进去。然后别人再看这篇文章或者评论时，之前注入的这段 JS 代码就执行了。<strong>JS 代码一旦执行，那可就不受控制了，因为它跟网页原有的 JS 有同样的权限</strong>，例如可以获取 server 端数据、可以获取 cookie 等。</p>
+<p>比如早些年社交网站经常爆出 XSS 蠕虫，通过发布的文章内插入 JS，用户访问了感染不安全 JS 注入的文章，会自动重新发布新的文章，这样的文章会通过推荐系统进入到每个用户的文章列表面前，很快就会造成大规模的感染。</p>
+<h3 id="2-2-防范"><a href="#2-2-防范" class="headerlink" title="2.2 防范"></a>2.2 防范</h3><p>前端对用户输入内容进行验证，如果有风险，就进行替换。例如：<code>&amp;</code> 替换为 <code>&amp;amp;</code></p>
+<h2 id="3-CSRF-跨站请求伪造"><a href="#3-CSRF-跨站请求伪造" class="headerlink" title="3. CSRF: 跨站请求伪造"></a>3. CSRF: 跨站请求伪造</h2><h3 id="3-1-介绍"><a href="#3-1-介绍" class="headerlink" title="3.1 介绍"></a>3.1 介绍</h3><p>CSRF 是借用了当前操作者的权限来偷偷地完成某个操作，而不是拿到用户的信息。比如获取<code>cookie</code>、破解<code>token</code>加密等等。</p>
+<h3 id="3-2-防范"><a href="#3-2-防范" class="headerlink" title="3.2 防范"></a>3.2 防范</h3><ul>
+<li>敏感数据不使用<code>GET</code></li>
+<li>前后端约定加密方式和密钥，<strong>并且经常更新密钥</strong></li>
+<li>对 IP 限制一定时间内的访问次数</li>
+<li>设置网站白名单</li>
+</ul>
+<h2 id="4-中间人攻击"><a href="#4-中间人攻击" class="headerlink" title="4. 中间人攻击"></a>4. 中间人攻击</h2><h3 id="4-1-原理和防范"><a href="#4-1-原理和防范" class="headerlink" title="4.1 原理和防范"></a>4.1 原理和防范</h3><p>它也被称为浏览器劫持、web 劫持。可以往 web 中添加一些第三方厂商的 dom 元素，或者重定向到另外的钓鱼站。</p>
+<p>常用手段有 2 种：</p>
+<ol>
+<li>网络报文传输过程中对其截获、篡改（过程中）</li>
+<li>客户端发起 http 请求之前或者得到 response 之后对数据篡改（开头、结尾）</li>
+</ol>
+<p>防范方式就是使用 <code>https</code> 协议，一套在传输层 TCP 和应用层 HTTP 之间的 TLS 协议。</p>
+<h3 id="4-2-https-交互细节"><a href="#4-2-https-交互细节" class="headerlink" title="4.2 https 交互细节"></a>4.2 https 交互细节</h3><p>以下内容摘自：<a href="https://toutiao.io/posts/ju2uhb/preview" target="_blank" rel="noopener">《深入理解 Web 安全：中间人攻击》</a></p>
+<p>简单地说，一次 https 网络请求在建立开始阶段具有以下的一个“握手”流程：</p>
+<p>首先，客户端向服务端发起一个基于 https 协议的网络请求，这相当于告诉它：“我希望得到一个安全加密的网页，你可别直接把明文扔过来！”</p>
+<p>服务端接收到这个网络请求后，了解到客户端的提出的这种加密的诉求，于是先把一个<em>公钥</em>和网站的 https 证书发送给客户端。</p>
+<p>客户端随后要做两件事，一是验证证书的合法性与时效性，如果颁发证书的机构客户端这边不承认或者证书中标明的过期时间已经过了，这都会导致客户端浏览器报出那个红叉子，chrome 浏览器还会直接拦截掉这个请求，除非用户点详情-&gt;继续，否则不会与该网站的服务器进行后续沟通，这相当于一个强交互的提醒，告诉用户“我拿到的证书有问题，这网站可能是个冒牌货，你要看仔细了！”</p>
+<p>如果以上两步验证无误，那么客户端会先生成一个<em>随机秘钥</em>，利用刚刚拿到的<em>公钥</em>给自己要访问的 url+这个<em>随机秘钥</em>进行加密，把密文再次发往服务端。</p>
+<p>当服务端收到客户端传过来的密文之后，会通过自己手里持有的一个<em>私钥</em>对密文进行解密。<em>注意，这里提到的私钥和刚刚的公钥是一对儿秘钥，这是一个典型的非对称加密，加密和解密分别使用两把不同的钥匙，这也保证了在此场景下的安全性。</em></p>
+<p>此时，服务端要将真正的 html 网页文本发给你了，它会利用解密得到的<em>随机秘钥</em>对网页文本内容进行加密，将密文发给客户端。</p>
+<p>客户端拿到真正的 html 报文之后，就用自己刚才生成的那个<em>随机秘钥</em>进行解密，然后就得到了跟普通 http 请求时一样的一个网页文本了，在这之后就像往常那样解析、渲染、加载更多资源……</p>
+<p>对于真正要传输的 html 文本，实际上是使用刚刚提到的这个<em>随机秘钥</em>进行了一次对称加密，因为上锁和开锁的钥匙实际上是一模一样的。</p>
+<h2 id="5-DDoS"><a href="#5-DDoS" class="headerlink" title="5. DDoS"></a>5. DDoS</h2><p>攻击者在短时间内发起大量请求，利用协议的缺点，耗尽服务器的资源，导致网站无法响应正常的访问。</p>
+<p>我之前也经历过，在这篇<a href="https://godbmw.com/passages/2018-11-06-ddos-recover-and-think/" target="_blank" rel="noopener">《被 DDos 后的及时补救与一些思考》</a></p>
+<p>防范的措施，或者称之为补救措施更合适，有以下建议：</p>
+<ol>
+<li>借助云厂商 CDN：静态流量的资源还得自己掏钱</li>
+<li>IP 黑/白名单：<code>nginx</code> 和 <code>apache</code> 都可以设置</li>
+<li>HTTP 请求信息：根据 UserAgent 等字段的信息</li>
+<li>静态化：博客网站直接挂在 github 等平台上</li>
+<li>备份网站：阮一峰老师的网站被 ddos 的时候就有个备份页面</li>
+<li>其他：弹性 ip、免费的 DNSpod、国内外分流、高防 ip 等等</li>
+</ol>
+<h2 id="6-点击劫持"><a href="#6-点击劫持" class="headerlink" title="6. 点击劫持"></a>6. 点击劫持</h2><p>点击劫持是一种视觉欺骗的攻击手段。攻击者通过 <code>iframe</code> 嵌套嵌入被攻击网页，诱导用户点击。如果用户之前登陆过被攻击网页，那么浏览器可能保存了信息，因此可以以用户的身份实现操作。</p>
+<p>js 防范手段：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">style</span> <span class="attr">id</span>=<span class="string">"click-jack"</span>&gt;</span></span><br><span class="line">    html &#123;</span><br><span class="line">      display: none !important;</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="actionscript">    <span class="comment">// 判断当前页面是否是iframe加载</span></span></span><br><span class="line"><span class="actionscript">    <span class="keyword">if</span> (self === top) &#123;</span></span><br><span class="line"><span class="javascript">      <span class="keyword">const</span> style = <span class="built_in">document</span>.getElementById(<span class="string">"click-jack"</span>);</span></span><br><span class="line"><span class="javascript">      <span class="built_in">document</span>.body.removeChild(style);</span></span><br><span class="line"><span class="actionscript">    &#125; <span class="keyword">else</span> &#123;</span></span><br><span class="line">      top.location = self.location;</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>浏览器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CSS动画特效</title>
+    <url>/2019/10/24/CSS%E5%8A%A8%E7%94%BB%E7%89%B9%E6%95%88/</url>
+    <content><![CDATA[<h2 id="特效一览"><a href="#特效一览" class="headerlink" title="特效一览"></a>特效一览</h2><p><strong>滑箱</strong>：</p>
+<p><img src="https://static.godbmw.com/img/2019-07-24-button-animation/1.gif" alt=""></p>
+<p><strong>果冻</strong>：</p>
+<p><img src="https://static.godbmw.com/img/2019-07-24-button-animation/2.gif" alt=""></p>
+<p><strong>脉冲</strong>：</p>
+<p><img src="https://static.godbmw.com/img/2019-07-24-button-animation/3.gif" alt=""></p>
+<p><strong>闪光</strong>：</p>
+<p><img src="https://static.godbmw.com/img/2019-07-24-button-animation/4.gif" alt=""></p>
+<p><strong>气泡</strong>：</p>
+<p><img src="https://static.godbmw.com/img/2019-07-24-button-animation/5.gif" alt=""></p>
+<a id="more"></a>
+
+<h2 id="滑箱特效"><a href="#滑箱特效" class="headerlink" title="滑箱特效"></a>滑箱特效</h2><h3 id="效果图"><a href="#效果图" class="headerlink" title="效果图"></a>效果图</h3><p><img src="https://static.godbmw.com/img/2019-07-24-button-animation/1.gif" alt=""></p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>因为 button 元素可以使用 before/after 伪元素，所以借助伪元素，可以实现动态图中的遮盖层。</p>
+<p>为了避免回流重绘，滑箱的运动方向是垂直方向，所以使用<code>scaleY</code>属性。对于动画的方向，需要借助<code>transform-origin</code>改变动画原点。</p>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>html：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">button</span>&gt;</span>xin-tan.com<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>css：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">button</span> &#123;</span><br><span class="line">  <span class="attribute">outline</span>: none;</span><br><span class="line">  <span class="attribute">border</span>: none;</span><br><span class="line">  <span class="attribute">z-index</span>: <span class="number">1</span>;</span><br><span class="line">  <span class="attribute">position</span>: relative;</span><br><span class="line">  <span class="attribute">color</span>: white;</span><br><span class="line">  <span class="attribute">background</span>: <span class="number">#40a9ff</span>;</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">0.5em</span> <span class="number">1em</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">button</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">""</span>;</span><br><span class="line">  <span class="attribute">z-index</span>: -<span class="number">1</span>;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">bottom</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">left</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">right</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="number">#fa541c</span>;</span><br><span class="line">  <span class="attribute">transform-origin</span>: center bottom;</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">scaleY</span>(0);</span><br><span class="line">  <span class="attribute">transition</span>: transform <span class="number">0.4s</span> ease-in-out;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">button</span><span class="selector-pseudo">:hover</span> &#123;</span><br><span class="line">  <span class="attribute">cursor</span>: pointer;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">button</span><span class="selector-pseudo">:hover</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">  <span class="attribute">transform-origin</span>: center top;</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">scaleY</span>(1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="果冻特效"><a href="#果冻特效" class="headerlink" title="果冻特效"></a>果冻特效</h2><h3 id="效果图-1"><a href="#效果图-1" class="headerlink" title="效果图"></a>效果图</h3><p><img src="https://static.godbmw.com/img/2019-07-24-button-animation/2.gif" alt=""></p>
+<h3 id="原理和代码"><a href="#原理和代码" class="headerlink" title="原理和代码"></a>原理和代码</h3><p>果冻特效可以分割成 5 个部分，所以无法简单通过 <code>transition</code> 来实现，要借助<code>animation</code>。并且动画触发的时间点是鼠标移入的时候，因此 <code>animation</code> 要在<code>:hvoer</code>中声明。</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">button</span> &#123;</span><br><span class="line">  <span class="attribute">z-index</span>: <span class="number">1</span>;</span><br><span class="line">  <span class="attribute">color</span>: white;</span><br><span class="line">  <span class="attribute">background</span>: <span class="number">#40a9ff</span>;</span><br><span class="line">  <span class="attribute">outline</span>: none;</span><br><span class="line">  <span class="attribute">border</span>: none;</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">0.5em</span> <span class="number">1em</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">button</span><span class="selector-pseudo">:hover</span> &#123;</span><br><span class="line">  <span class="attribute">cursor</span>: pointer;</span><br><span class="line">  <span class="attribute">animation</span>: jelly <span class="number">0.5s</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下面开始编写 jelly 动画的特效。这个动画可以分解为 4 个部分：「初始 =&gt; 挤高 =&gt; 压扁 =&gt; 回到初始状态」。挤高 和 压扁这里都是通过<code>scale</code>来实现的，代码如下：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">@<span class="keyword">keyframes</span> jelly &#123;</span><br><span class="line">  0%,</span><br><span class="line">  100% &#123;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">scale</span>(1, 1);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  33% &#123;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">scale</span>(0.9, 1.1);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  66% &#123;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">scale</span>(1.1, 0.9);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="更进一步"><a href="#更进一步" class="headerlink" title="更进一步"></a>更进一步</h3><p>上面的动态已经仿真不错了，如果将 4 部分变成 5 部分：「初始 =&gt; 挤高 =&gt; 压扁 =&gt; 挤高 =&gt; 回到初始状态」。<strong>视觉上会有一种弹簧的特效</strong>，就像手压果冻后的效果：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">@<span class="keyword">keyframes</span> jelly &#123;</span><br><span class="line">  0%,</span><br><span class="line">  100% &#123;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">scale</span>(1, 1);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  25%,</span><br><span class="line">  75% &#123;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">scale</span>(0.9, 1.1);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  50% &#123;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">scale</span>(1.1, 0.9);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="脉冲特效"><a href="#脉冲特效" class="headerlink" title="脉冲特效"></a>脉冲特效</h2><h3 id="效果图-2"><a href="#效果图-2" class="headerlink" title="效果图"></a>效果图</h3><p><img src="https://static.godbmw.com/img/2019-07-24-button-animation/3.gif" alt=""></p>
+<h3 id="原理和代码-1"><a href="#原理和代码-1" class="headerlink" title="原理和代码"></a>原理和代码</h3><p>首先，还是去掉 button 的默认样式。注意设置 button 的<code>z-index</code>属性并且让其生效，要保证其大于 <code>::before</code> 的 <code>z-index</code> 属性，<strong>防止 dom 元素被伪元素覆盖</strong>。</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">button</span> &#123;</span><br><span class="line">  <span class="attribute">position</span>: relative;</span><br><span class="line">  <span class="attribute">z-index</span>: <span class="number">1</span>;</span><br><span class="line">  <span class="attribute">border</span>: none;</span><br><span class="line">  <span class="attribute">outline</span>: none;</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">0.5em</span> <span class="number">1em</span>;</span><br><span class="line">  <span class="attribute">color</span>: white;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="number">#1890ff</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">button</span><span class="selector-pseudo">:hover</span> &#123;</span><br><span class="line">  <span class="attribute">cursor</span>: pointer;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>剩下的就是设置伪元素。因为脉冲特效给人的感觉是“镂空”放大。因此，变化对象是 <code>border</code> 属性。而镂空的效果，是通过透明背景来实现的。</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">button</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">""</span>;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">z-index</span>: -<span class="number">1</span>;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">left</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">bottom</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">right</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">border</span>: <span class="number">4px</span> solid <span class="number">#1890ff</span>;</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">scale</span>(1);</span><br><span class="line">  <span class="attribute">transform-origin</span>: center;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>动画启动时间是鼠标移入，border 上变化的是颜色变淡和大小变小，透明度也逐渐变成 0。</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">button</span><span class="selector-pseudo">:hover</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">  <span class="attribute">transition</span>: all <span class="number">0.75s</span> ease-out;</span><br><span class="line">  <span class="attribute">border</span>: <span class="number">1px</span> solid<span class="number">#e6f7ff</span>;</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">scale</span>(1.25);</span><br><span class="line">  <span class="attribute">opacity</span>: <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>⚠️ transition 和 transform 是放在<code>hover</code>状态下的伪元素，目的是让动画瞬间回到初始状态。</p>
+<h2 id="闪光特效"><a href="#闪光特效" class="headerlink" title="闪光特效"></a>闪光特效</h2><h3 id="效果图-3"><a href="#效果图-3" class="headerlink" title="效果图"></a>效果图</h3><p><img src="https://static.godbmw.com/img/2019-07-24-button-animation/4.gif" alt=""></p>
+<h3 id="原理和代码-2"><a href="#原理和代码-2" class="headerlink" title="原理和代码"></a>原理和代码</h3><p>实现上依然是借助伪元素，闪光特效更多注重的是配色，动画方面实现的核心是利用<code>rotate</code>来实现「倾斜」的效果，利用<code>translate3d</code>来实现「闪动」的效果。</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">button</span> &#123;</span><br><span class="line">  <span class="attribute">outline</span>: none;</span><br><span class="line">  <span class="attribute">border</span>: none;</span><br><span class="line">  <span class="attribute">z-index</span>: <span class="number">1</span>;</span><br><span class="line">  <span class="attribute">position</span>: relative;</span><br><span class="line">  <span class="attribute">color</span>: white;</span><br><span class="line">  <span class="attribute">background</span>: <span class="number">#262626</span>;</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">0.5em</span> <span class="number">1em</span>;</span><br><span class="line">  <span class="attribute">overflow</span>: hidden;</span><br><span class="line">  <span class="attribute">--shine-width</span>: <span class="number">1.25em</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">button</span><span class="selector-pseudo">::after</span> &#123;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">""</span>;</span><br><span class="line">  <span class="attribute">z-index</span>: -<span class="number">1</span>;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">background</span>: <span class="number">#595959</span>;</span><br><span class="line">  <span class="comment">/* 核心代码：位置一步步调整 */</span></span><br><span class="line">  <span class="attribute">top</span>: -<span class="number">50%</span>;</span><br><span class="line">  <span class="attribute">left</span>: <span class="number">0%</span>;</span><br><span class="line">  <span class="attribute">bottom</span>: -<span class="number">50%</span>;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">1.25em</span>;</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">translate3d</span>(-200%, 0, 0) <span class="built_in">rotate</span>(35deg);</span><br><span class="line">  <span class="comment">/*  */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">button</span><span class="selector-pseudo">:hover</span> &#123;</span><br><span class="line">  <span class="attribute">cursor</span>: pointer;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">button</span><span class="selector-pseudo">:hover</span><span class="selector-pseudo">::after</span> &#123;</span><br><span class="line">  <span class="attribute">transition</span>: transform <span class="number">0.5s</span> ease-in-out;</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">translate3d</span>(500%, 0, 0) <span class="built_in">rotate</span>(35deg);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>⚠️<code>translate3d</code>除了避免重绘回流，还能启用 GPU 加速，性能更高。但之前为了方便讲述，一般使用的是<code>translate</code>属性。</p>
+<h2 id="气泡特效"><a href="#气泡特效" class="headerlink" title="气泡特效"></a>气泡特效</h2><h3 id="效果图-4"><a href="#效果图-4" class="headerlink" title="效果图"></a>效果图</h3><p><img src="https://static.godbmw.com/img/2019-07-24-button-animation/5.gif" alt=""></p>
+<h3 id="原理和代码-3"><a href="#原理和代码-3" class="headerlink" title="原理和代码"></a>原理和代码</h3><p>首先，还是禁用 button 元素的默认样式，并且调整一下配色：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">button</span> &#123;</span><br><span class="line">  <span class="attribute">outline</span>: none;</span><br><span class="line">  <span class="attribute">border</span>: none;</span><br><span class="line">  <span class="attribute">cursor</span>: pointer;</span><br><span class="line">  <span class="attribute">color</span>: white;</span><br><span class="line">  <span class="attribute">position</span>: relative;</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">0.5em</span> <span class="number">1em</span>;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="number">#40a9ff</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由于 button 的伪元素层级是覆盖 button 的，所以要设置 <code>z-index</code> 属性，防止伪元素遮盖显示。毕竟只想要背景色的遮盖，字体不需要遮盖。在上面的样式中添加：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">button</span> &#123;</span><br><span class="line">  <span class="attribute">z-index</span>: <span class="number">1</span>;</span><br><span class="line">  <span class="attribute">overflow</span>: hidden;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后处理的是伪元素的变化效果。<strong>特效是从中心向四周蔓延</strong>，所以应该让其居中。</p>
+<p>对于大小变化，还是利用<code>scale</code>属性。</p>
+<p>因为是圆形，所以将<code>border-radius</code>设置为 50%即可。</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">button</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">  <span class="attribute">z-index</span>: -<span class="number">1</span>;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">""</span>;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">50%</span>;</span><br><span class="line">  <span class="attribute">left</span>: <span class="number">50%</span>;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">1em</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">1em</span>;</span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">50%</span>;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="number">#9254de</span>;</span><br><span class="line">  <span class="attribute">transform-origin</span>: center;</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">translate3d</span>(-50%, -50%, 0) <span class="built_in">scale</span>(0, 0);</span><br><span class="line">  <span class="attribute">transition</span>: transform <span class="number">0.45s</span> ease-in-out;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">button</span><span class="selector-pseudo">:hover</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">translate3d</span>(-50%, -50%, 0) <span class="built_in">scale</span>(15, 15);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="换个方向？"><a href="#换个方向？" class="headerlink" title="换个方向？"></a>换个方向？</h3><p>示例代码中的气泡特效是从中间向四周扩散，如果想要从左上角向右下角扩散呢？例如下图所示：</p>
+<p><img src="https://static.godbmw.com/img/2019-07-24-button-animation/6.gif" alt=""></p>
+<p>处理过程很简单，<strong>只需要改变一下气泡的初始位置即可</strong>。</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">button</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">  <span class="attribute">z-index</span>: -<span class="number">1</span>;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">""</span>;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">1em</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">1em</span>;</span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">50%</span>;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="number">#9254de</span>;</span><br><span class="line">  <span class="comment">/* 变化位置的代码 */</span></span><br><span class="line">  <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">left</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">transform-origin</span>: center;</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">scale3d</span>(0, 0, 0);</span><br><span class="line">  <span class="attribute">transition</span>: transform <span class="number">0.45s</span> ease-in-out;</span><br><span class="line">  <span class="comment">/* *********** */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">button</span><span class="selector-pseudo">:hover</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">scale3d</span>(15, 15, 15);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="http://caibaojian.com/transform-origin.html" target="_blank" rel="noopener">《transform-origin: 改变动画原点》</a></li>
+<li><a href="https://blog.teamtreehouse.com/increase-your-sites-performance-with-hardware-accelerated-css" target="_blank" rel="noopener">《Increase Your Site’s Performance with Hardware-Accelerated CSS》</a></li>
+<li><a href="https://www.ruanyifeng.com/blog/2017/05/css-variables.html" target="_blank" rel="noopener">《css3 变量》</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>CSS</category>
+      </categories>
+      <tags>
+        <tag>CSS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>HTML5原生拖放事件的学习与实践</title>
+    <url>/2019/10/24/HTML5%E5%8E%9F%E7%94%9F%E6%8B%96%E6%94%BE%E4%BA%8B%E4%BB%B6%E7%9A%84%E5%AD%A6%E4%B9%A0%E4%B8%8E%E5%AE%9E%E8%B7%B5/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>之前学习了 HTML5 的拖放事件，开发中也用到了拖拽组件。为了厘清整体的逻辑，专门做了一个小例子。</p>
+<p>具体实现的效果也很简单：元素可以在容器中任意拖动，元素被移入容器的时候，还会有相关样式的改变已达到更好的展示效果。</p>
+<p>例子基本运用了拖放事件的全部事件，并且尽量简洁的展示了出来。特此记录。</p>
+<a id="more"></a>
+
+<h3 id="拖放事件介绍"><a href="#拖放事件介绍" class="headerlink" title="拖放事件介绍"></a>拖放事件介绍</h3><p>由名字可以看出来，拖放事件由 2 部分组成：拖动和释放。</p>
+<p>而拖动又由 2 部分组成，分别是被拖动元素的相关事件和元素容器的相关事件。</p>
+<p><strong>1、被拖动元素的相关事件</strong> ：</p>
+<table>
+<thead>
+<tr>
+<th>事件名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>dragstart</td>
+<td>在元素开始被拖动时候触发</td>
+</tr>
+<tr>
+<td>drag</td>
+<td>在元素被拖动时反复触发</td>
+</tr>
+<tr>
+<td>dragend</td>
+<td>在拖动操作完成时触发</td>
+</tr>
+</tbody></table>
+<p><strong>2、容器的相关事件</strong> ：</p>
+<table>
+<thead>
+<tr>
+<th>事件名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>dragenter</td>
+<td>当被拖动元素进入目的地元素所占据的屏幕空间时触发，<strong>一般需要取消浏览器的默认行为</strong>。</td>
+</tr>
+<tr>
+<td>dragover</td>
+<td>当被拖动元素在目的地元素内时触发，<strong>一般需要取消浏览器的默认行为</strong>。</td>
+</tr>
+<tr>
+<td>dragleave</td>
+<td>当被拖动元素没有放下就离开目的地元素时触发</td>
+</tr>
+</tbody></table>
+<p><strong>3、释放事件</strong> ：</p>
+<table>
+<thead>
+<tr>
+<th>事件名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>drop</td>
+<td>当被拖动元素在目的地元素里放下时触发，<strong>一般需要取消浏览器的默认行为</strong>。</td>
+</tr>
+</tbody></table>
+<h3 id="效果展示"><a href="#效果展示" class="headerlink" title="效果展示"></a>效果展示</h3><p>为了方便说明，先看代码实现的效果。请前往  <a href="https://github.com/dongyuanxin/html5-drag-drop" target="_blank" rel="noopener">Github 仓库</a>  下载 <code>demo.html</code>  和 <code>demo.js</code>  到本地，然后用 Chrome 打开 html 文件，初始效果如下图：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/233327/1554824440934-6b099e29-5d03-47c8-9fcd-358dfac034ce.png#align=left&display=inline&height=489&name=image.png&originHeight=612&originWidth=329&size=8385&status=done&width=263" alt="image.png"></p>
+<p>将图中的可拖拽元素，拖放到下面的容器中，这个过程的效果如下所示。箭头表示拖拽方向，方框代表动态改变的容器样式。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/233327/1554824491746-4b790630-bb53-479a-9f5d-eaafef60cb23.png#align=left&display=inline&height=501&name=image.png&originHeight=627&originWidth=364&size=15595&status=done&width=291" alt="image.png"></p>
+<p>最后，松开鼠标，将元素放入到下面的容器中，整个过程完成。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/233327/1554824562321-b6b1a435-27b5-43ca-abb8-7e63265b839e.png#align=left&display=inline&height=477&name=image.png&originHeight=596&originWidth=315&size=8094&status=done&width=252" alt="image.png"></p>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>首先，先编写 html 代码。因为元素可以在两个容器之间任意拖动，因此这两个容器都需要监听 drapenter、dragover、dragleave、drop 这四个事件。</p>
+<p>被拖拽元素的 <code>draggable</code>  属性需要指明为 <code>true</code> ，才可以被拖拽。同时为了记录一些信息，需要监听 dragstart 事件。</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"./demo.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span></span></span><br><span class="line"><span class="tag">    <span class="attr">class</span>=<span class="string">"container"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">ondragenter</span>=<span class="string">"onDragEnter(event)"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">ondragover</span>=<span class="string">"onDragOver(event)"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">ondragleave</span>=<span class="string">"onDragLeave(event)"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">ondrop</span>=<span class="string">"onDrop(event)"</span></span></span><br><span class="line"><span class="tag">  &gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"target"</span> <span class="attr">draggable</span>=<span class="string">"true"</span> <span class="attr">ondragstart</span>=<span class="string">"onDragStart(event)"</span>&gt;</span></span><br><span class="line">      被拖拽元素</span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span></span></span><br><span class="line"><span class="tag">    <span class="attr">class</span>=<span class="string">"container"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">ondragenter</span>=<span class="string">"onDragEnter(event)"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">ondragover</span>=<span class="string">"onDragOver(event)"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">ondragleave</span>=<span class="string">"onDragLeave(event)"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">ondrop</span>=<span class="string">"onDrop(event)"</span></span></span><br><span class="line"><span class="tag">  &gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>为了让拖拽效果更明显，实现效果展示-&gt;第二部分的，拖拽元素进入一个新的容器的时候，新容器展示阴影效果。编写阴影效果样式：</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;<span class="selector-tag">style</span>&gt;</span><br><span class="line">  <span class="selector-class">.container</span> &#123;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">200px</span>;</span><br><span class="line">    <span class="attribute">height</span>: <span class="number">200px</span>;</span><br><span class="line">    <span class="attribute">padding</span>: <span class="number">10px</span>;</span><br><span class="line">    <span class="attribute">border</span>: <span class="number">1px</span> solid <span class="number">#aaaaaa</span>;</span><br><span class="line">    <span class="attribute">margin-bottom</span>: <span class="number">10px</span>;</span><br><span class="line">    <span class="attribute">transition</span>: box-shadow .<span class="number">3s</span> ease;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="selector-id">#target</span> &#123;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">50px</span>;</span><br><span class="line">    <span class="attribute">height</span>: <span class="number">50px</span>;</span><br><span class="line">    <span class="attribute">border</span>: <span class="number">1px</span> solid black;</span><br><span class="line">    <span class="attribute">margin</span>: <span class="number">0</span> auto;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="selector-class">.container</span><span class="selector-class">.active</span> &#123;</span><br><span class="line">    <span class="attribute">border-bottom-width</span>: <span class="number">0</span>;</span><br><span class="line">    <span class="attribute">box-shadow</span>: <span class="number">0</span> <span class="number">10px</span> <span class="number">6px</span> -<span class="number">6px</span> <span class="number">#777</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
+
+<p>最后，编写 <code>demo.js</code>  代码。具体逻辑请看代码中的注释信息：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> target = <span class="literal">null</span>,</span><br><span class="line">  container = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 寻找拖拽元素的容器类</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">findParentContainer</span>(<span class="params">node</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!node || node === <span class="built_in">document</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (node.classList.contains(<span class="string">"container"</span>)) &#123;</span><br><span class="line">    <span class="keyword">return</span> node;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> findParentContainer(node.parentNode);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 元素开始被拖拽时, 标记元素原生的容器类</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">onDragStart</span>(<span class="params">event</span>) </span>&#123;</span><br><span class="line">  target = event.target;</span><br><span class="line">  container = findParentContainer(target);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 元素进入目的容器时, 如果不是原来的容器, 则可以放置</span></span><br><span class="line"><span class="comment">// 此时更改样式, 以更好向用户展示</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">onDragEnter</span>(<span class="params">event</span>) </span>&#123;</span><br><span class="line">  event.preventDefault();</span><br><span class="line">  <span class="keyword">if</span> (event.target !== container) &#123;</span><br><span class="line">    event.target.classList.add(<span class="string">"active"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 元素在目的容器内时触发</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">onDragOver</span>(<span class="params">event</span>) </span>&#123;</span><br><span class="line">  event.preventDefault();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 元素离开目的容器, 需要移除相关样式</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">onDragLeave</span>(<span class="params">event</span>) </span>&#123;</span><br><span class="line">  event.preventDefault();</span><br><span class="line">  event.target.classList.remove(<span class="string">"active"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 元素被放置在目的容器, 添加DOM节点, 移除相关样式</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">onDrop</span>(<span class="params">event</span>) </span>&#123;</span><br><span class="line">  event.preventDefault();</span><br><span class="line">  event.target.appendChild(target);</span><br><span class="line">  event.target.classList.remove(<span class="string">"active"</span>);</span><br><span class="line">  target = <span class="literal">null</span>;</span><br><span class="line">  container = <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><ul>
+<li>代码地址: <a href="https://github.com/dongyuanxin/html5-drag-drop" target="_blank" rel="noopener">Github</a></li>
+<li><a href="http://www.w3school.com.cn/html5/html_5_draganddrop.asp" target="_blank" rel="noopener">《HTML5 拖放》</a></li>
+<li><a href="https://juejin.im/post/5a169d08518825592c07c666" target="_blank" rel="noopener">《HTML5 原生拖拽/拖放》</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>HTML</category>
+      </categories>
+      <tags>
+        <tag>HTML</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Spring Boot Package</title>
+    <url>/2019/10/24/Spring-Boot-%E6%89%93%E5%8C%85/</url>
+    <content><![CDATA[<p>最近在学习Spring Boot，搞了一台阿里云Linux, 试图使用 gogs + Jenkins 来将写的 Demo 构建出来，但是发现基础差的太多搞不成，所以退而求其次，先在本地打包完成再用ftp 上传到服务器，这里记录下Spring Boot 项目如如何通过maven打成 jar 包并运行。</p>
+<ol>
+<li><p>首先，需要一个基于maven 的 Spring Boot 项目，我这里简单写了一个Hello World 和文件上传，项目结构简单。</p>
+</li>
+<li><p>我需要借助Maven 来帮我构建一个jar包，所以在pom.xml 中引入 <strong>spring-boot-maven-plugin</strong> 并指定启动类，同时 packaging  写为 jar,这样最后可以得到一个 jar 包</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"> <span class="tag">&lt;<span class="name">packaging</span>&gt;</span>jar<span class="tag">&lt;/<span class="name">packaging</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">mainClass</span>&gt;</span>com.cdliu.JavaCore.Application<span class="tag">&lt;/<span class="name">mainClass</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ol>
+<a id="more"></a>
+<ol start="3">
+<li><p>在启动类中继承 SpringBootServletInitializer 并重写 configure 方法，SpringBootServletInitializer用于替代传统mvc模式中的web.xml。如果你要使用外部的sevvlet容器，例如tomcat。就需要继承该类并重写configure方法。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableAutoConfiguration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Application</span>  <span class="keyword">extends</span> <span class="title">SpringBootServletInitializer</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(Application.class,args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> SpringApplicationBuilder <span class="title">configure</span><span class="params">(SpringApplicationBuilder builder)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span>  builder.sources(<span class="keyword">this</span>.getClass());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="4">
+<li><p>在Idea 中利用 mvn clean 及 mvn install,这样就能得到一个 jar 包了</p>
+</li>
+<li><p>利用java -jar 命令启动 java 程序</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">java -jar uploader-1.0.jar</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Ip+port 访问，正常访问，端口可以在application.yml 中配置</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">9900</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Linux 下同样使用java -jar 命令即可启动，当然，Java环境是必须要装的</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Docker</title>
     <url>/2019/10/24/Docker/</url>
     <content><![CDATA[<h3 id="Docker-学习"><a href="#Docker-学习" class="headerlink" title="Docker 学习"></a>Docker 学习</h3><h4 id="1-常用的Docker命令"><a href="#1-常用的Docker命令" class="headerlink" title="1 常用的Docker命令"></a>1 常用的Docker命令</h4><h5 id="1-1-镜像相关命令"><a href="#1-1-镜像相关命令" class="headerlink" title="1.1 镜像相关命令"></a>1.1 镜像相关命令</h5><h6 id="1-1-1-docker-服务相关"><a href="#1-1-1-docker-服务相关" class="headerlink" title="1.1.1 docker 服务相关"></a>1.1.1 docker 服务相关</h6><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">--启动docker</span><br><span class="line">systemctl start docker</span><br><span class="line"></span><br><span class="line">--停止docker</span><br><span class="line">systemctl stop docker</span><br><span class="line"></span><br><span class="line">--查看docker服务状态</span><br><span class="line">systemctl status docker</span><br><span class="line"></span><br><span class="line">--查看详细信息</span><br><span class="line">docker info</span><br></pre></td></tr></table></figure>

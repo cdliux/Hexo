@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="浏览器," />
 
 
 
@@ -79,11 +79,15 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Lewis&#39;s Blog">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;archives&#x2F;index.html">
+<meta name="description" content="1. SQL 注入1.1 介绍例如做一个系统的登录界面，输入用户名和密码，提交之后，后端直接拿到数据就拼接 SQL 语句去查询数据库。如果在输入时进行了恶意的 SQL 拼装，那么最后生成的 SQL 就会有问题。 比如后端拼接的 SQL 字符串是： 1SELECT * FROM user WHERE username = &amp;apos;user&amp;apos; AND password = &amp;apos;pwd&amp;apos;;  如果不做任何防护，">
+<meta name="keywords" content="浏览器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Web安全问题与防护">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;24&#x2F;Web%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98%E4%B8%8E%E9%98%B2%E6%8A%A4&#x2F;index.html">
 <meta property="og:site_name" content="Lewis&#39;s Blog">
+<meta property="og:description" content="1. SQL 注入1.1 介绍例如做一个系统的登录界面，输入用户名和密码，提交之后，后端直接拿到数据就拼接 SQL 语句去查询数据库。如果在输入时进行了恶意的 SQL 拼装，那么最后生成的 SQL 就会有问题。 比如后端拼接的 SQL 字符串是： 1SELECT * FROM user WHERE username = &amp;apos;user&amp;apos; AND password = &amp;apos;pwd&amp;apos;;  如果不做任何防护，">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-10-24T15:58:02.724Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -114,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/archives/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/10/24/Web安全问题与防护/"/>
 
 
 
 
 
-  <title>归档 | Lewis's Blog</title>
+  <title>Web安全问题与防护 | Lewis's Blog</title>
   
 
 
@@ -139,7 +143,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -297,259 +301,257 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-      <span class="archive-page-counter">
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/24/Web%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98%E4%B8%8E%E9%98%B2%E6%8A%A4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lewis Liu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://www.cdliux.cn/images/2019/10/24/avatar.md.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lewis's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
+          <h1 class="post-title" itemprop="name headline">Web安全问题与防护</h1>
         
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-24T23:55:57+08:00">
+                2019-10-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        
-        嗯..! 目前共计 6 篇日志。 继续努力。
-      </span>
 
-      
-
-        
-        
-        
-
-        
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2019">2019</h1>
-          </div>
-        
-        
+            
+          
 
-        
+          
+          
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+          
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/10/24/Web%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98%E4%B8%8E%E9%98%B2%E6%8A%A4/" itemprop="url">
+          
+            <div class="post-wordcount">
               
-                <span itemprop="name">Web安全问题与防护</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  
+                </span>
               
-            </a>
-        
-      </h2>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-10-24T23:55:57+08:00"
-              content="2019-10-24" >
-          10-24
-        </time>
-      </div>
+              
+                <span class="post-meta-divider">|</span>
+              
 
-    </header>
-  </article>
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  
+                </span>
+              
+            </div>
+          
 
+          
 
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/10/24/CSS%E5%8A%A8%E7%94%BB%E7%89%B9%E6%95%88/" itemprop="url">
-              
-                <span itemprop="name">CSS动画特效</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-10-24T23:53:42+08:00"
-              content="2019-10-24" >
-          10-24
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/10/24/HTML5%E5%8E%9F%E7%94%9F%E6%8B%96%E6%94%BE%E4%BA%8B%E4%BB%B6%E7%9A%84%E5%AD%A6%E4%B9%A0%E4%B8%8E%E5%AE%9E%E8%B7%B5/" itemprop="url">
-              
-                <span itemprop="name">HTML5原生拖放事件的学习与实践</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-10-24T23:46:17+08:00"
-              content="2019-10-24" >
-          10-24
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
+        <h2 id="1-SQL-注入"><a href="#1-SQL-注入" class="headerlink" title="1. SQL 注入"></a>1. SQL 注入</h2><h3 id="1-1-介绍"><a href="#1-1-介绍" class="headerlink" title="1.1 介绍"></a>1.1 介绍</h3><p>例如做一个系统的登录界面，输入用户名和密码，提交之后，后端直接拿到数据就拼接 SQL 语句去查询数据库。如果在输入时进行了恶意的 SQL 拼装，那么最后生成的 SQL 就会有问题。</p>
+<p>比如后端拼接的 SQL 字符串是：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">user</span> <span class="keyword">WHERE</span> username = <span class="string">'user'</span> <span class="keyword">AND</span> <span class="keyword">password</span> = <span class="string">'pwd'</span>;</span><br></pre></td></tr></table></figure>
 
-        
-        
-        
+<p>如果不做任何防护，直接拼接前端的字符，就会出现问题。比如前端传来的<code>user</code>字段是以<code>&#39;#</code>结尾，<code>password</code>随意：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">user</span> <span class="keyword">WHERE</span> username = <span class="string">'user'</span><span class="comment">#'AND password = 'pwd';</span></span><br></pre></td></tr></table></figure>
 
-        
-        
+<p><strong>密码验证部分直接被注释掉了</strong>。</p>
+<a id="more"></a>
 
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/10/24/Spring-Boot-%E6%89%93%E5%8C%85/" itemprop="url">
-              
-                <span itemprop="name">Spring Boot Package</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-10-24T23:25:54+08:00"
-              content="2019-10-24" >
-          10-24
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
+<h3 id="1-2-防范"><a href="#1-2-防范" class="headerlink" title="1.2 防范"></a>1.2 防范</h3><p>后端应该对于字符串有转义，可以借助成熟的库的 API 来拼接命令，而不是自己手动拼接。</p>
+<h2 id="2-XSS：跨站脚本攻击"><a href="#2-XSS：跨站脚本攻击" class="headerlink" title="2. XSS：跨站脚本攻击"></a>2. XSS：跨站脚本攻击</h2><h3 id="2-1-介绍"><a href="#2-1-介绍" class="headerlink" title="2.1 介绍"></a>2.1 介绍</h3><p>原理上就是黑客通过某种方式（发布文章、发布评论等）将一段特定的 JS 代码隐蔽地输入进去。然后别人再看这篇文章或者评论时，之前注入的这段 JS 代码就执行了。<strong>JS 代码一旦执行，那可就不受控制了，因为它跟网页原有的 JS 有同样的权限</strong>，例如可以获取 server 端数据、可以获取 cookie 等。</p>
+<p>比如早些年社交网站经常爆出 XSS 蠕虫，通过发布的文章内插入 JS，用户访问了感染不安全 JS 注入的文章，会自动重新发布新的文章，这样的文章会通过推荐系统进入到每个用户的文章列表面前，很快就会造成大规模的感染。</p>
+<h3 id="2-2-防范"><a href="#2-2-防范" class="headerlink" title="2.2 防范"></a>2.2 防范</h3><p>前端对用户输入内容进行验证，如果有风险，就进行替换。例如：<code>&amp;</code> 替换为 <code>&amp;amp;</code></p>
+<h2 id="3-CSRF-跨站请求伪造"><a href="#3-CSRF-跨站请求伪造" class="headerlink" title="3. CSRF: 跨站请求伪造"></a>3. CSRF: 跨站请求伪造</h2><h3 id="3-1-介绍"><a href="#3-1-介绍" class="headerlink" title="3.1 介绍"></a>3.1 介绍</h3><p>CSRF 是借用了当前操作者的权限来偷偷地完成某个操作，而不是拿到用户的信息。比如获取<code>cookie</code>、破解<code>token</code>加密等等。</p>
+<h3 id="3-2-防范"><a href="#3-2-防范" class="headerlink" title="3.2 防范"></a>3.2 防范</h3><ul>
+<li>敏感数据不使用<code>GET</code></li>
+<li>前后端约定加密方式和密钥，<strong>并且经常更新密钥</strong></li>
+<li>对 IP 限制一定时间内的访问次数</li>
+<li>设置网站白名单</li>
+</ul>
+<h2 id="4-中间人攻击"><a href="#4-中间人攻击" class="headerlink" title="4. 中间人攻击"></a>4. 中间人攻击</h2><h3 id="4-1-原理和防范"><a href="#4-1-原理和防范" class="headerlink" title="4.1 原理和防范"></a>4.1 原理和防范</h3><p>它也被称为浏览器劫持、web 劫持。可以往 web 中添加一些第三方厂商的 dom 元素，或者重定向到另外的钓鱼站。</p>
+<p>常用手段有 2 种：</p>
+<ol>
+<li>网络报文传输过程中对其截获、篡改（过程中）</li>
+<li>客户端发起 http 请求之前或者得到 response 之后对数据篡改（开头、结尾）</li>
+</ol>
+<p>防范方式就是使用 <code>https</code> 协议，一套在传输层 TCP 和应用层 HTTP 之间的 TLS 协议。</p>
+<h3 id="4-2-https-交互细节"><a href="#4-2-https-交互细节" class="headerlink" title="4.2 https 交互细节"></a>4.2 https 交互细节</h3><p>以下内容摘自：<a href="https://toutiao.io/posts/ju2uhb/preview" target="_blank" rel="noopener">《深入理解 Web 安全：中间人攻击》</a></p>
+<p>简单地说，一次 https 网络请求在建立开始阶段具有以下的一个“握手”流程：</p>
+<p>首先，客户端向服务端发起一个基于 https 协议的网络请求，这相当于告诉它：“我希望得到一个安全加密的网页，你可别直接把明文扔过来！”</p>
+<p>服务端接收到这个网络请求后，了解到客户端的提出的这种加密的诉求，于是先把一个<em>公钥</em>和网站的 https 证书发送给客户端。</p>
+<p>客户端随后要做两件事，一是验证证书的合法性与时效性，如果颁发证书的机构客户端这边不承认或者证书中标明的过期时间已经过了，这都会导致客户端浏览器报出那个红叉子，chrome 浏览器还会直接拦截掉这个请求，除非用户点详情-&gt;继续，否则不会与该网站的服务器进行后续沟通，这相当于一个强交互的提醒，告诉用户“我拿到的证书有问题，这网站可能是个冒牌货，你要看仔细了！”</p>
+<p>如果以上两步验证无误，那么客户端会先生成一个<em>随机秘钥</em>，利用刚刚拿到的<em>公钥</em>给自己要访问的 url+这个<em>随机秘钥</em>进行加密，把密文再次发往服务端。</p>
+<p>当服务端收到客户端传过来的密文之后，会通过自己手里持有的一个<em>私钥</em>对密文进行解密。<em>注意，这里提到的私钥和刚刚的公钥是一对儿秘钥，这是一个典型的非对称加密，加密和解密分别使用两把不同的钥匙，这也保证了在此场景下的安全性。</em></p>
+<p>此时，服务端要将真正的 html 网页文本发给你了，它会利用解密得到的<em>随机秘钥</em>对网页文本内容进行加密，将密文发给客户端。</p>
+<p>客户端拿到真正的 html 报文之后，就用自己刚才生成的那个<em>随机秘钥</em>进行解密，然后就得到了跟普通 http 请求时一样的一个网页文本了，在这之后就像往常那样解析、渲染、加载更多资源……</p>
+<p>对于真正要传输的 html 文本，实际上是使用刚刚提到的这个<em>随机秘钥</em>进行了一次对称加密，因为上锁和开锁的钥匙实际上是一模一样的。</p>
+<h2 id="5-DDoS"><a href="#5-DDoS" class="headerlink" title="5. DDoS"></a>5. DDoS</h2><p>攻击者在短时间内发起大量请求，利用协议的缺点，耗尽服务器的资源，导致网站无法响应正常的访问。</p>
+<p>我之前也经历过，在这篇<a href="https://godbmw.com/passages/2018-11-06-ddos-recover-and-think/" target="_blank" rel="noopener">《被 DDos 后的及时补救与一些思考》</a></p>
+<p>防范的措施，或者称之为补救措施更合适，有以下建议：</p>
+<ol>
+<li>借助云厂商 CDN：静态流量的资源还得自己掏钱</li>
+<li>IP 黑/白名单：<code>nginx</code> 和 <code>apache</code> 都可以设置</li>
+<li>HTTP 请求信息：根据 UserAgent 等字段的信息</li>
+<li>静态化：博客网站直接挂在 github 等平台上</li>
+<li>备份网站：阮一峰老师的网站被 ddos 的时候就有个备份页面</li>
+<li>其他：弹性 ip、免费的 DNSpod、国内外分流、高防 ip 等等</li>
+</ol>
+<h2 id="6-点击劫持"><a href="#6-点击劫持" class="headerlink" title="6. 点击劫持"></a>6. 点击劫持</h2><p>点击劫持是一种视觉欺骗的攻击手段。攻击者通过 <code>iframe</code> 嵌套嵌入被攻击网页，诱导用户点击。如果用户之前登陆过被攻击网页，那么浏览器可能保存了信息，因此可以以用户的身份实现操作。</p>
+<p>js 防范手段：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">style</span> <span class="attr">id</span>=<span class="string">"click-jack"</span>&gt;</span></span><br><span class="line">    html &#123;</span><br><span class="line">      display: none !important;</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="actionscript">    <span class="comment">// 判断当前页面是否是iframe加载</span></span></span><br><span class="line"><span class="actionscript">    <span class="keyword">if</span> (self === top) &#123;</span></span><br><span class="line"><span class="javascript">      <span class="keyword">const</span> style = <span class="built_in">document</span>.getElementById(<span class="string">"click-jack"</span>);</span></span><br><span class="line"><span class="javascript">      <span class="built_in">document</span>.body.removeChild(style);</span></span><br><span class="line"><span class="actionscript">    &#125; <span class="keyword">else</span> &#123;</span></span><br><span class="line">      top.location = self.location;</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br></pre></td></tr></table></figure>
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/10/24/Docker/" itemprop="url">
-              
-                <span itemprop="name">Docker</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-10-24T20:11:34+08:00"
-              content="2019-10-24" >
-          10-24
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/10/24/hello-world/" itemprop="url">
-              
-                <span itemprop="name">Hello World</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-10-24T19:39:29+08:00"
-              content="2019-10-24" >
-          10-24
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>Donate comment here</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="http://www.cdliux.cn/images/2019/10/24/wc.md.jpg" alt="Lewis Liu 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="http://www.cdliux.cn/images/2019/10/24/ap.md.jpg" alt="Lewis Liu 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" rel="tag"># 浏览器</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/24/CSS%E5%8A%A8%E7%94%BB%E7%89%B9%E6%95%88/" rel="next" title="CSS动画特效">
+                <i class="fa fa-chevron-left"></i> CSS动画特效
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -557,6 +559,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -577,8 +583,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -658,6 +673,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-SQL-注入"><span class="nav-number">1.</span> <span class="nav-text">1. SQL 注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-介绍"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-防范"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 防范</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-XSS：跨站脚本攻击"><span class="nav-number">2.</span> <span class="nav-text">2. XSS：跨站脚本攻击</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-介绍"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-防范"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 防范</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-CSRF-跨站请求伪造"><span class="nav-number">3.</span> <span class="nav-text">3. CSRF: 跨站请求伪造</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-介绍"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-防范"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 防范</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-中间人攻击"><span class="nav-number">4.</span> <span class="nav-text">4. 中间人攻击</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-原理和防范"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 原理和防范</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-https-交互细节"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 https 交互细节</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-DDoS"><span class="nav-number">5.</span> <span class="nav-text">5. DDoS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-点击劫持"><span class="nav-number">6.</span> <span class="nav-text">6. 点击劫持</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -807,6 +838,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
