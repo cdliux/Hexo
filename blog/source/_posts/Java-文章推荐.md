@@ -34,7 +34,6 @@ tags: Java
    spring-core、spring-web、spring-boot、spring-boot-stater、spring-cloud、spring-aop、spring-mvc、spring-security，太多了，去它的官网了解吧。
    [https://spring.io](https://spring.io/)
 
-   
 
 6. 知识点：Java8
    Java8是公认的带来最多特性的一个版本，现阶段很大一部分人的开发都基于Java8，加之Oracle对java11收费，我相信Java8还能撑很长一段时间。
